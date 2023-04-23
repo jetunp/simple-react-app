@@ -1,7 +1,10 @@
 import Header from "./components/Header";
+import Footer from "./components/Footer";
+import About from "./components/About";
 import Tasks from "./components/Tasks";
 import AddTask from "./components/AddTask";
 import {useEffect, useState} from 'react';
+import { BrowserRouter as Router , Route, Routes} from "react-router-dom"; 
 
 const App = () => {
   //global level state to toggle the form to add a new task
@@ -77,13 +80,33 @@ const toggleReminder = async (id) => {
 ))}
 
 
-  return (
-    <div className="container">
-     <Header onAdd={() => setShowAddTask(!showAddTask)} showAdd={showAddTask}/>
-     {showAddTask && <AddTask onAdd={addTask}/>}
-     {tasks.length>0 ? (<Tasks tasks={tasks} onDelete={deleteTask} toggleReminder={toggleReminder} />) : 'No tasks to be displayed!!'}
-    </div>
-    
+return (
+    <Router>
+      <div className="container">
+        <Header onAdd={() => setShowAddTask(!showAddTask)} showAdd={showAddTask}/>
+        <Routes>
+          <Route
+            path='/'
+            element={
+              <>
+                {showAddTask && <AddTask onAdd={addTask} />}
+                {tasks.length > 0 ? (
+                  <Tasks
+                    tasks={tasks}
+                    onDelete={deleteTask}
+                    onToggle={toggleReminder}
+                  />
+                ) : (
+                  'No tasks to be displayed!!'
+                )}
+              </>
+            }
+          />
+          <Route path='/about' element={<About />} />
+        </Routes>
+        <Footer />
+      </div>
+    </Router>   
   )
 }
 
